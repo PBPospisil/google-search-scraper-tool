@@ -34,7 +34,7 @@ def unpackArgs(kwargs):
             kwargs.get(KWARG_TAG_ATTRS),
             kwargs.get(KWARG_OPTIONAL)]
 
-def validateArguments(listingOrganization, listingMunicipality, tag, tagAttributes):
+def validateArgs(listingOrganization, listingMunicipality, tag, tagAttributes):
     if(listingOrganization == None):
         raise ValueError("Missing argument ({arg})".format(arg=KWARG_ORGANIZATION))
     if(listingMunicipality == None):
@@ -66,7 +66,7 @@ def main(**kwargs):
      tagAttributes,
      optionalQueryAdditions] = unpackArgs(kwargs)
     
-    validateArguments(listingOrganization, listingMunicipality, tag, tagAttributes)
+    validateArgs(listingOrganization, listingMunicipality, tag, tagAttributes)
 
     if(optionalQueryAdditions == None or optionalQueryAdditions == ''):
         res = scrapeListing(listingOrganization, listingMunicipality)
