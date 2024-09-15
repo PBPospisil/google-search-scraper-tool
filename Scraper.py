@@ -6,28 +6,30 @@ import re
 from bs4 import BeautifulSoup
 from services import writeContentToFile
 
-def attemptAltPatterns(soup, pattern, tag, tagAttributes):
-    print(soup)
-    html = soup.find(tag, class_=tagAttributes)
-    if html and html is not None:
-        return html.contents[0]
-    
-    html = soup.find_all(text= re.compile(pattern))
-    if html:
-        return html
-    
-    return None
+def attemptAltPatterns(soup, pattern):
+    return soup.find_all(text=re.compile(pattern))
+
+def attemptWithAttrs(soup, targetAttributes):
+    return soup.find(targetAttributes.get('tag'), attrs=targetAttributes.get('class'))    
 
 def getPage(url):
     return requests.get(url)
         
-def parseResponseForTargetField(response, pattern, tag, tagAttributes):
+def parseResponseForTargetField(response, pattern, targetAttributes):
     soup = BeautifulSoup(response.content, 'html5lib', from_encoding='utf-8')
-    return attemptAltPatterns(soup, pattern, tag, tagAttributes)
 
-def scrape(url, tag, tagAttributes, pattern):
+    html = attemptWithAttrs(soup, targetAttributes)
+    if html and html is not None:
+        return html.contents[0]
+    
+    html = attemptAltPatterns(soup, pattern)
+    if html: return html
+
+    return None
+
+def scrape(url, targetAttributes, pattern):
     res = getPage(url)
-    targetedContent = parseResponseForTargetField(res, pattern, tag, tagAttributes)    
+    targetedContent = parseResponseForTargetField(res, pattern, targetAttributes)    
     writeContentToFile(targetedContent)
 
 if __name__ == '__main__':

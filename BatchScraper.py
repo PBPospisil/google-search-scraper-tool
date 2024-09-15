@@ -13,9 +13,8 @@ def main(sourceFileName):
             content = line.rstrip('\n').split(',')
             GoogleSearchScraper.scrape(org=content[0],
                                      mun=content[1],
-                                     tag=content[2],
-                                     tag_attrs=content[3],
-                                     opt=content[4])
+                                     attrs=content[2],
+                                     opt=content[3])
         fp.close()
 
 if __name__ == '__main__':
