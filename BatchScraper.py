@@ -11,7 +11,7 @@ def main(sourceFileName):
         print('\n')
         for line in tqdm(contents, total=numberOfLines, desc ='Batch Progress'):
             content = line.rstrip('\n').split(',')
-            GoogleSearchScraper.main(org=content[0],
+            GoogleSearchScraper.scrape(org=content[0],
                                      mun=content[1],
                                      tag=content[2],
                                      tag_attrs=content[3],
