@@ -12,9 +12,11 @@ def main(sourceFileName):
         for line in tqdm(contents, total=numberOfLines, desc ='Batch Progress'):
             content = line.rstrip('\n').split(',')
             GoogleSearchScraper.scrape(org=content[0],
-                                     mun=content[1],
-                                     attrs=content[2],
-                                     opt=content[3])
+                                       mun=content[1],
+                                       tag=content[2],
+                                       attrs=content[3],
+                                       pattern=content[4],
+                                       opt=content[5])
         fp.close()
 
 if __name__ == '__main__':

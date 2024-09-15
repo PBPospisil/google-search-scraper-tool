@@ -14,13 +14,11 @@ def unpackArgs(kwargs):
             targetAttributes,
             kwargs.get(KWARG_OPTIONAL)]
 
-def validateArgs(listingOrganization, listingMunicipality, targetAttributes):
+def validateArgs(listingOrganization, listingMunicipality):
     if(listingOrganization is not None):
         raise ValueError("Invalid argument ({arg})".format(arg=KWARG_ORGANIZATION))
     if(listingMunicipality is not None):
         raise ValueError("Invalid argument ({arg})".format(arg=KWARG_MUNICIPALITY))
-    if(targetAttributes is not None or not targetAttributes):
-        raise ValueError("Invalid argument ({arg})".format(arg=KWARG_TARGET_ATTRS))
 
 def writeContentToFile(content):
     with open('batch_file.txt', 'a') as batch_file:

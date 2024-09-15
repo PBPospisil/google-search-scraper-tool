@@ -10,12 +10,12 @@ def attemptAltPatterns(soup, pattern):
     return soup.find_all(text=re.compile(pattern))
 
 def attemptWithAttrs(soup, targetAttributes):
-    return soup.find(targetAttributes.get('tag'), attrs=targetAttributes.get('class'))    
+    return soup.find(targetAttributes.get('tag'), attrs=targetAttributes)    
 
 def getPage(url):
     return requests.get(url)
         
-def parseResponseForTargetField(response, pattern, targetAttributes):
+def parseResponseForTargetField(response, targetAttributes, pattern):
     soup = BeautifulSoup(response.content, 'html5lib', from_encoding='utf-8')
 
     html = attemptWithAttrs(soup, targetAttributes)
@@ -27,9 +27,9 @@ def parseResponseForTargetField(response, pattern, targetAttributes):
 
     return None
 
-def scrape(url, targetAttributes, pattern):
+def scrape(url, tag='div', targetAttributes={}, pattern=''):
     res = getPage(url)
-    targetedContent = parseResponseForTargetField(res, pattern, targetAttributes)    
+    targetedContent = parseResponseForTargetField(res, tag, targetAttributes, pattern)    
     writeContentToFile(targetedContent)
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ from constants import URL_PREFIX, ADDRESS_PATTERN_CALGARY
 def composeUrl(query):
     return "{url_prefix}{query}".format(url_prefix=URL_PREFIX, query=query)
 
-def buildQuery(listingOrganization, listingMunicipality, optionalQueryAdditions):
+def buildQuery(listingOrganization, listingMunicipality, optionalQueryAdditions=''):
     if(optionalQueryAdditions == None or optionalQueryAdditions == ''):
         return "{org}+{mun}".format(org=listingOrganization, mun=listingMunicipality)
     else:
@@ -19,13 +19,15 @@ def buildQuery(listingOrganization, listingMunicipality, optionalQueryAdditions)
 def scrape(**kwargs):
     [listingOrganization,
      listingMunicipality,
+     targetTag,
      targetAttributes,
+     altPattern,
      optionalQueryAdditions] = unpackArgs(kwargs)
     
-    validateArgs(listingOrganization, listingMunicipality, targetAttributes)
+    validateArgs(listingOrganization, listingMunicipality)
 
     url = composeUrl(buildQuery(listingOrganization, listingMunicipality, optionalQueryAdditions))
-    Scraper.scrape(url, targetAttributes, ADDRESS_PATTERN_CALGARY)
+    Scraper.scrape(url, targetTag, targetAttributes, altPattern)
 
 if __name__ == '__main__':
     scrape(**dict(arg.split('=') for arg in sys.argv[1:]))
