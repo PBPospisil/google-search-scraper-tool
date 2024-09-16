@@ -3,20 +3,28 @@
 import sys
 import GoogleSearchScraper
 from tqdm import tqdm
+import json
 
-def main(sourceFileName):
-    with open(sourceFileName, 'r') as fp:
+def parseJsonParamSet(paramSet):
+    try:
+        return json.loads(paramSet)
+    except:
+        raise ValueError("Invalid batch params: error parsing json")
+
+def main(*args):
+    with open(args[0], 'r') as fp:
         contents = fp.readlines()
         numberOfLines = len(contents)
         print('\n')
-        for line in tqdm(contents, total=numberOfLines, desc ='Batch Progress'):
-            content = line.rstrip('\n').split(',')
-            GoogleSearchScraper.scrape(org=content[0],
-                                       mun=content[1],
-                                       tag=content[2],
-                                       attrs=content[3],
-                                       pattern=content[4],
-                                       opt=content[5])
+        for line in tqdm(contents, total=numberOfLines, desc ='Batch progress'):
+            print(line)
+            content = parseJsonParamSet(line.rstrip('\n'))
+            GoogleSearchScraper.scrape(org=content['org'],
+                                       mun=content['mun'],
+                                       tag=content['tag'],
+                                       attrs=content['attrs'],
+                                       pattern=content['pattern'],
+                                       opt=content['opt'])
         fp.close()
 
 if __name__ == '__main__':

@@ -1,23 +1,22 @@
-from constants import (KWARG_MUNICIPALITY,KWARG_OPTIONAL, KWARG_ORGANIZATION, KWARG_TARGET_ATTRS)
-import json
+from constants import (KWARG_MUNICIPALITY,
+                       KWARG_ORGANIZATION,
+                       KWARG_TAG,
+                       KWARG_TARGET_ATTRS,
+                       KWARG_PATTERN,
+                       KWARG_OPTIONAL)
 
 def unpackArgs(kwargs):
-    attrsJson = kwargs.get(KWARG_TARGET_ATTRS)
-    if attrsJson:
-        try:
-            targetAttributes = json.loads(attrsJson)
-        except:
-            raise ValueError("Invalid argument (attrs): error encountered while loading json")
-        
     return [kwargs.get(KWARG_ORGANIZATION),
             kwargs.get(KWARG_MUNICIPALITY),
-            targetAttributes,
+            kwargs.get(KWARG_TAG),
+            kwargs.get(KWARG_TARGET_ATTRS),
+            kwargs.get(KWARG_PATTERN),
             kwargs.get(KWARG_OPTIONAL)]
 
 def validateArgs(listingOrganization, listingMunicipality):
-    if(listingOrganization is not None):
+    if(listingOrganization is None):
         raise ValueError("Invalid argument ({arg})".format(arg=KWARG_ORGANIZATION))
-    if(listingMunicipality is not None):
+    if(listingMunicipality is None):
         raise ValueError("Invalid argument ({arg})".format(arg=KWARG_MUNICIPALITY))
 
 def writeContentToFile(content):

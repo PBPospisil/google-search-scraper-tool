@@ -9,16 +9,16 @@ from services import writeContentToFile
 def attemptAltPatterns(soup, pattern):
     return soup.find_all(text=re.compile(pattern))
 
-def attemptWithAttrs(soup, targetAttributes):
-    return soup.find(targetAttributes.get('tag'), attrs=targetAttributes)    
+def attemptWithAttrs(soup, tag, targetAttributes):
+    return soup.find(tag, attrs=targetAttributes)    
 
 def getPage(url):
     return requests.get(url)
         
-def parseResponseForTargetField(response, targetAttributes, pattern):
+def parseResponseForTargetField(response, tag, targetAttributes, pattern):
     soup = BeautifulSoup(response.content, 'html5lib', from_encoding='utf-8')
 
-    html = attemptWithAttrs(soup, targetAttributes)
+    html = attemptWithAttrs(soup, tag, targetAttributes)
     if html and html is not None:
         return html.contents[0]
     
