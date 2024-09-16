@@ -3,7 +3,7 @@
 import sys
 import Scraper
 from services import unpackArgs, validateArgs
-from constants import URL_PREFIX, ADDRESS_PATTERN_CALGARY
+from constants import URL_PREFIX
 
 def composeUrl(query):
     return "{url_prefix}{query}".format(url_prefix=URL_PREFIX, query=query)
