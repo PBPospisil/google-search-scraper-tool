@@ -4,7 +4,11 @@ import sys
 import requests
 import re
 from bs4 import BeautifulSoup
-from services import writeContentToFile
+
+def writeContentToFile(content):
+    with open('batch_file.txt', 'a') as batch_file:
+        batch_file.write('{content}\n'.format(content=content))
+        batch_file.close()
 
 def attemptAltPatterns(soup, pattern):
     return soup.find(text=re.compile(pattern))
