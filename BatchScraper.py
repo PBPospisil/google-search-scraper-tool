@@ -17,7 +17,6 @@ def main(*args):
         numberOfLines = len(contents)
         print('\n')
         for line in tqdm(contents, total=numberOfLines, desc ='Batch progress'):
-            print(line)
             content = parseJsonParamSet(line.rstrip('\n'))
             GoogleSearchScraper.scrape(org=content['org'],
                                        mun=content['mun'],
