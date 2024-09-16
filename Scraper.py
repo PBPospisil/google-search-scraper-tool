@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from services import writeContentToFile
 
 def attemptAltPatterns(soup, pattern):
-    return soup.find_all(text=re.compile(pattern))
+    return soup.find(text=re.compile(pattern))
 
 def attemptWithAttrs(soup, tag, targetAttributes):
     return soup.find(tag, attrs=targetAttributes)    
