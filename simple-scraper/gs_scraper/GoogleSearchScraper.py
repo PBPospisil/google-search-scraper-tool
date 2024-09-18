@@ -2,22 +2,22 @@
 
 from .. scraper import Scraper
 from .. constants import (URL_PREFIX,
-                          KWARG_KEYWORDS,
-                          KWARG_TAG,
-                          KWARG_TARGET_ATTRS,
-                          KWARG_PATTERN,
-                          KWARG_RESULTS_FILE)
+                          KEYWORDS,
+                          TARGET_TAG,
+                          TARGET_ATTRS,
+                          TARGET_PATTERN,
+                          RESULTS_FILENAME)
 
 def unpackArgs(kwargs):
-    return [kwargs.get(KWARG_KEYWORDS),
-            kwargs.get(KWARG_TAG),
-            kwargs.get(KWARG_TARGET_ATTRS),
-            kwargs.get(KWARG_PATTERN),
-            kwargs.get(KWARG_RESULTS_FILE)]
+    return [kwargs.get(KEYWORDS),
+            kwargs.get(TARGET_TAG),
+            kwargs.get(TARGET_ATTRS),
+            kwargs.get(TARGET_PATTERN),
+            kwargs.get(RESULTS_FILENAME)]
 
 def validateArgs(queryKeywords):
-    if(queryKeywords is None):
-        raise ValueError("Invalid argument ({arg})".format(arg=KWARG_KEYWORDS))
+    if(queryKeywords is None or not queryKeywords):
+        raise ValueError("Invalid argument ({arg})".format(arg=KEYWORDS))
     
 def composeUrl(query):
     return "{url_prefix}{query}".format(url_prefix=URL_PREFIX, query=query)
@@ -25,13 +25,13 @@ def composeUrl(query):
 def buildQuery(queryKeywords):
     return queryKeywords.replace(' ', '+')
 
-def scrape(**kwargs):
+def scrape(args):
     [queryKeywords,
      targetTag,
      targetAttributes,
      altPattern,
-     resultsFilename] = unpackArgs(kwargs)
-    
+     resultsFilename] = unpackArgs(args)
+
     validateArgs(queryKeywords)
 
     Scraper.scrape({ 'url': composeUrl(buildQuery(queryKeywords)),

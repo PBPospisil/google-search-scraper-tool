@@ -15,7 +15,6 @@ def unpackArgs():
     parser.add_argument('-m', '--mode')
     parser.add_argument('-a', '--args')
     args = parser.parse_args()
-
     return [args.mode, parseJson(args.args)]
 
 def main():

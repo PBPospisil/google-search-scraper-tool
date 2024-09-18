@@ -4,16 +4,16 @@ import sys
 from .. gs_scraper import GoogleSearchScraper
 from tqdm import tqdm
 import json
-from .. constants import ARG_BATCH_FILENAME, KWARG_RESULTS_FILE
+from .. constants import BATCH_ARG_FILENAME, RESULTS_FILENAME
 
 def unpackArgs(args):
-    return [args.get(ARG_BATCH_FILENAME), args.get(KWARG_RESULTS_FILE)]
+    return [args.get(BATCH_ARG_FILENAME), args.get(RESULTS_FILENAME)]
 
 def validateArgs(batchArgsFilename, resultsFilename):
     if(batchArgsFilename is None or not batchArgsFilename):
-        raise ValueError("Invalid argument ({arg})".format(arg=ARG_BATCH_FILENAME))
+        raise ValueError("Invalid argument ({arg})".format(arg=BATCH_ARG_FILENAME))
     if(resultsFilename is None or not resultsFilename):
-        raise ValueError("Invalid argument ({arg})".format(arg=KWARG_RESULTS_FILE))
+        raise ValueError("Invalid argument ({arg})".format(arg=RESULTS_FILENAME))
 
 def parseJsonParamSet(paramSet):
     try:
@@ -24,11 +24,8 @@ def parseJsonParamSet(paramSet):
 def scrapeFromBatchArgs(fileContents, numberOfLines, resultsFilename):
     for line in tqdm(fileContents, total=numberOfLines, desc='Batch progress'):
         content = parseJsonParamSet(line.rstrip('\n'))
-        GoogleSearchScraper.scrape(tag=content['tag'],
-                                   attrs=content['attrs'],
-                                   pattern=content['pattern'],
-                                   results=resultsFilename,
-                                   keywords=content['keywords'])
+        content['results'] = resultsFilename
+        GoogleSearchScraper.scrape(content)
 
 def readFileContentsAndScrape(batchArgsFilename, resultsFilename):
     with open(batchArgsFilename, 'r') as fp:
