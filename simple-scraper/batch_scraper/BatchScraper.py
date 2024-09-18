@@ -24,13 +24,11 @@ def parseJsonParamSet(paramSet):
 def scrapeFromBatchArgs(fileContents, numberOfLines, resultsFilename):
     for line in tqdm(fileContents, total=numberOfLines, desc='Batch progress'):
         content = parseJsonParamSet(line.rstrip('\n'))
-        GoogleSearchScraper.scrape(org=content['org'],
-                                    mun=content['mun'],
-                                    tag=content['tag'],
-                                    attrs=content['attrs'],
-                                    pattern=content['pattern'],
-                                    results=resultsFilename,
-                                    opt=content['opt'])
+        GoogleSearchScraper.scrape(tag=content['tag'],
+                                   attrs=content['attrs'],
+                                   pattern=content['pattern'],
+                                   results=resultsFilename,
+                                   keywords=content['keywords'])
 
 def readFileContentsAndScrape(batchArgsFilename, resultsFilename):
     with open(batchArgsFilename, 'r') as fp:

@@ -21,10 +21,10 @@ def validateResultFileName(resultsFile):
 
 def unpackArgs(kwargs):
     return [kwargs.get(KWARG_URL),
-            kwargs.get(KWARG_RESULTS_FILE),
             kwargs.get(KWARG_TAG),
             kwargs.get(KWARG_TARGET_ATTRS),
-            kwargs.get(KWARG_PATTERN)]
+            kwargs.get(KWARG_PATTERN),
+            kwargs.get(KWARG_RESULTS_FILE)]
 
 def writeContentToFile(content):
     with open('batch_file.txt', 'a') as batchFile:
@@ -58,10 +58,10 @@ def parseResponseForTargetField(response, tag='div', targetAttributes={}, patter
     return None
 
 def scrape(args):
-    [url, resultsFile, tag, targetAttributes, pattern] = unpackArgs(args)
+    [url, tag, targetAttributes, pattern, resultsFile] = unpackArgs(args)
     validateUrl(url)
     resultsFile = validateResultFileName(resultsFile)
-    
+
     res = getPage(url)
     targetedContent = parseResponseForTargetField(res, tag, targetAttributes, pattern)    
     writeContentToFile(targetedContent, resultsFile)

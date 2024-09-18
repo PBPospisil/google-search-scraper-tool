@@ -1,55 +1,40 @@
 #!/usr/bin/env python3
 
-import sys
 from .. scraper import Scraper
 from .. constants import (URL_PREFIX,
-                          KWARG_ORGANIZATION,
-                          KWARG_MUNICIPALITY,
+                          KWARG_KEYWORDS,
                           KWARG_TAG,
                           KWARG_TARGET_ATTRS,
                           KWARG_PATTERN,
-                          KWARG_RESULTS_FILE,
-                          KWARG_OPTIONAL)
+                          KWARG_RESULTS_FILE)
 
 def unpackArgs(kwargs):
-    return [kwargs.get(KWARG_ORGANIZATION),
-            kwargs.get(KWARG_MUNICIPALITY),
+    return [kwargs.get(KWARG_KEYWORDS),
             kwargs.get(KWARG_TAG),
             kwargs.get(KWARG_TARGET_ATTRS),
             kwargs.get(KWARG_PATTERN),
-            kwargs.get(KWARG_RESULTS_FILE),
-            kwargs.get(KWARG_OPTIONAL)]
+            kwargs.get(KWARG_RESULTS_FILE)]
 
-def validateArgs(listingOrganization, listingMunicipality):
-    if(listingOrganization is None):
-        raise ValueError("Invalid argument ({arg})".format(arg=KWARG_ORGANIZATION))
-    if(listingMunicipality is None):
-        raise ValueError("Invalid argument ({arg})".format(arg=KWARG_MUNICIPALITY))
+def validateArgs(queryKeywords):
+    if(queryKeywords is None):
+        raise ValueError("Invalid argument ({arg})".format(arg=KWARG_KEYWORDS))
     
 def composeUrl(query):
     return "{url_prefix}{query}".format(url_prefix=URL_PREFIX, query=query)
 
-def buildQuery(listingOrganization, listingMunicipality, optionalQueryAdditions=''):
-    if(optionalQueryAdditions is None or not optionalQueryAdditions):
-        return "{org}+{mun}".format(org=listingOrganization, mun=listingMunicipality)
-    else:
-        return "{org}+{mun}+{opt}".format(org=listingOrganization,
-                                          mun=listingMunicipality,
-                                          opt=optionalQueryAdditions)
+def buildQuery(queryKeywords):
+    return queryKeywords.replace(' ', '+')
 
 def scrape(**kwargs):
-    [listingOrganization,
-     listingMunicipality,
+    [queryKeywords,
      targetTag,
      targetAttributes,
      altPattern,
-     resultsFilename,
-     optionalQueryAdditions] = unpackArgs(kwargs)
+     resultsFilename] = unpackArgs(kwargs)
     
-    validateArgs(listingOrganization, listingMunicipality)
+    validateArgs(queryKeywords)
 
-    url = composeUrl(buildQuery(listingOrganization, listingMunicipality, optionalQueryAdditions))
-    Scraper.scrape({ 'url': url,
+    Scraper.scrape({ 'url': composeUrl(buildQuery(queryKeywords)),
                      'tag': targetTag, 
                      'attrs': targetAttributes, 
                      'pattern': altPattern, 
