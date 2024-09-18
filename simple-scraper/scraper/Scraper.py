@@ -4,32 +4,22 @@ import sys
 import requests
 import re
 from bs4 import BeautifulSoup
-from .. constants import (KWARG_URL,
-                          KWARG_RESULTS_FILE,
-                          KWARG_TAG,
-                          KWARG_TARGET_ATTRS,
-                          KWARG_PATTERN)
+from .. constants import (TARGET_URL,
+                          TARGET_TAG,
+                          TARGET_ATTRS,
+                          TARGET_PATTERN,
+                          RESULTS_FILENAME)
 
 def validateUrl(url):
     if url is None or not url:
         raise ValueError('Invalid argument (url) can not be NoneType or empty')
 
-def validateResultFileName(resultsFile):
-    if resultsFile is None or not resultsFile:
-        return 'result.txt'
-    return resultsFile
-
 def unpackArgs(kwargs):
-    return [kwargs.get(KWARG_URL),
-            kwargs.get(KWARG_RESULTS_FILE),
-            kwargs.get(KWARG_TAG),
-            kwargs.get(KWARG_TARGET_ATTRS),
-            kwargs.get(KWARG_PATTERN)]
-
-def writeContentToFile(content):
-    with open('batch_file.txt', 'a') as batchFile:
-        batchFile.write('{content}\n'.format(content=content))
-        batchFile.close()
+    return [kwargs.get(TARGET_URL),
+            kwargs.get(TARGET_TAG),
+            kwargs.get(TARGET_ATTRS),
+            kwargs.get(TARGET_PATTERN),
+            kwargs.get(RESULTS_FILENAME)]
 
 def writeContentToFile(content, resultsFile='results.txt'):
     with open(resultsFile, 'a') as batchFile:
@@ -58,10 +48,12 @@ def parseResponseForTargetField(response, tag='div', targetAttributes={}, patter
     return None
 
 def scrape(args):
-    [url, resultsFile, tag, targetAttributes, pattern] = unpackArgs(args)
+    [url, tag, targetAttributes, pattern, resultsFile] = unpackArgs(args)
+
     validateUrl(url)
-    resultsFile = validateResultFileName(resultsFile)
-    
-    res = getPage(url)
-    targetedContent = parseResponseForTargetField(res, tag, targetAttributes, pattern)    
-    writeContentToFile(targetedContent, resultsFile)
+    targetedContent = parseResponseForTargetField(getPage(url), tag, targetAttributes, pattern)
+
+    if resultsFile is None or not resultsFile:
+        print(targetedContent)
+    else:
+        writeContentToFile(targetedContent, resultsFile)
