@@ -1,0 +1,1 @@
+from .GoogleSearchScraper import scrape

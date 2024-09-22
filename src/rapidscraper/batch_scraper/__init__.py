@@ -1,0 +1,1 @@
+from .BatchScraper import scrape
